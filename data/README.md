@@ -1,6 +1,12 @@
-# PokemonDB Scraper
+# Trainer Data Scrapers
 
-A Python scraper that extracts gym leader, Elite Four, and champion trainer data from [PokemonDB](https://pokemondb.net).
+Utilities for collecting structured trainer rosters from
+[PokemonDB](https://pokemondb.net) and
+[Bulbapedia](https://bulbapedia.bulbagarden.net).
+
+## PokemonDB Scraper
+
+A Python scraper that extracts gym leader, Elite Four, and champion trainer data from PokemonDB.
 
 ## Installation
 
@@ -115,6 +121,38 @@ The scraper outputs JSON data structured by game, with each game containing sect
 - Some pages may have different layouts or structures that could require parser updates
 - The scraper only extracts gym leaders, Elite Four members, and champions (not all trainers in the game)
 
+## Bulbapedia Scraper
+
+The Bulbapedia scraper reuses the PokemonDB output to determine which trainers to
+fetch, then queries Bulbapedia's MediaWiki API for detailed team data (including
+moves, items, and other metadata when available).
+
+### Usage
+
+```bash
+python bulbapedia_scraper.py
+```
+
+This command saves results to `bulbapedia_trainers.json`, grouped by the heading
+path that each roster table appears under (for example, `Pokémon -> HeartGold and
+SoulSilver`).
+
+### Options
+
+- `--pokemondb-json PATH`: Source JSON file from the PokemonDB scraper (default:
+  `pokemondb_trainers.json`).
+- `--trainer NAME`: Limit scraping to specific trainers (repeatable).
+- `--max-trainers N`: Only process the first `N` trainers (useful for debugging).
+- `--delay SECONDS`: Delay between API requests (default: 1.2 seconds).
+- `--user-agent STRING`: Custom user agent string for Bulbapedia requests.
+- `--output PATH`: Destination for the generated JSON (default:
+  `bulbapedia_trainers.json`).
+
+The output JSON contains a `source` section describing the request metadata, a
+`trainers` object keyed by trainer name, and a `failures` object listing any
+trainers whose pages could not be parsed.
+
 ## License
 
-This tool is for educational and personal use. Please respect PokemonDB's terms of service and don't abuse their servers.
+These tools are for educational and personal use. Please respect the source
+sites' terms of service and avoid abusive scraping.
